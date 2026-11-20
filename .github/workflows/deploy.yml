@@ -17,7 +17,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -32,8 +32,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
+      - name: Run frontend tests
         run: npm test
+
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+        working-directory: backend
+
+      - name: Run backend tests
+        run: npm test
+        working-directory: backend
 
       - name: Build
         run: npm run build
@@ -53,7 +65,19 @@ jobs:
       - name: Test SSH connection
         run: ssh ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "echo 'SSH connection successful!'"
 
-      - name: Deploy with rsync
+      # Backend first, so the API (and its migrations) is ready before the new site goes live.
+      - name: Upload backend source
+        run: |
+          rsync -az --delete \
+            --exclude node_modules --exclude dist --exclude data \
+            --exclude .env --exclude 'src/generated' \
+            backend/ \
+            ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:/var/www/jenga-api/
+
+      - name: Install, migrate and restart backend
+        run: ssh ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} 'bash -s' < deploy/deploy-backend.sh
+
+      - name: Deploy frontend with rsync
         run: |
           rsync -avz --delete \
             dist/ \

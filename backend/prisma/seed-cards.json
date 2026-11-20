@@ -1,0 +1,686 @@
+[
+  {
+    "id": "truth-01",
+    "category": "TRUTH",
+    "text": "What's the most embarrassing thing you've done trying to impress someone?",
+    "spicy": false
+  },
+  {
+    "id": "truth-02",
+    "category": "TRUTH",
+    "text": "What's the most questionable crush you've ever had? Names optional.",
+    "spicy": false
+  },
+  {
+    "id": "truth-03",
+    "category": "TRUTH",
+    "text": "What's a red flag you knowingly ignore if someone is hot enough?",
+    "spicy": false
+  },
+  {
+    "id": "truth-04",
+    "category": "TRUTH",
+    "text": "What's the most delusional thing you've ever convinced yourself of?",
+    "spicy": false
+  },
+  {
+    "id": "truth-05",
+    "category": "TRUTH",
+    "text": "What's your worst first-date story?",
+    "spicy": false
+  },
+  {
+    "id": "truth-06",
+    "category": "TRUTH",
+    "text": "Have you ever stalked someone's social media way further than you should have?",
+    "spicy": false
+  },
+  {
+    "id": "truth-07",
+    "category": "TRUTH",
+    "text": "What's something you pretend to hate but secretly love?",
+    "spicy": false
+  },
+  {
+    "id": "truth-08",
+    "category": "TRUTH",
+    "text": "What's the thirstiest thing you've ever done?",
+    "spicy": false
+  },
+  {
+    "id": "truth-09",
+    "category": "TRUTH",
+    "text": "What's an immediate ick for you?",
+    "spicy": false
+  },
+  {
+    "id": "truth-10",
+    "category": "TRUTH",
+    "text": "What's the worst text you've ever sent?",
+    "spicy": false
+  },
+  {
+    "id": "truth-11",
+    "category": "TRUTH",
+    "text": "What's your most toxic trait when you're attracted to someone?",
+    "spicy": false
+  },
+  {
+    "id": "truth-12",
+    "category": "TRUTH",
+    "text": "What's a lie you tell frequently?",
+    "spicy": false
+  },
+  {
+    "id": "truth-13",
+    "category": "TRUTH",
+    "text": "What's the most unserious reason you've ever stopped talking to someone?",
+    "spicy": false
+  },
+  {
+    "id": "truth-14",
+    "category": "TRUTH",
+    "text": "What's your most controversial opinion about dating?",
+    "spicy": false
+  },
+  {
+    "id": "truth-15",
+    "category": "TRUTH",
+    "text": "Have you ever had a crush on someone you absolutely shouldn't have?",
+    "spicy": false
+  },
+  {
+    "id": "truth-16",
+    "category": "TRUTH",
+    "text": "What's something you would never want your parents knowing about your dating life?",
+    "spicy": false
+  },
+  {
+    "id": "truth-17",
+    "category": "TRUTH",
+    "text": "What is your biggest guilty pleasure?",
+    "spicy": false
+  },
+  {
+    "id": "truth-18",
+    "category": "TRUTH",
+    "text": "What's something about you that people in this room would be surprised to learn?",
+    "spicy": false
+  },
+  {
+    "id": "truth-19",
+    "category": "TRUTH",
+    "text": "What's the pettiest thing you've ever done and would absolutely do again?",
+    "spicy": false
+  },
+  {
+    "id": "truth-20",
+    "category": "TRUTH",
+    "text": "What's the most cursed outfit you've worn to impress someone?",
+    "spicy": false
+  },
+  {
+    "id": "truth-21",
+    "category": "TRUTH",
+    "text": "What's the most unhinged thing you've done to avoid running into someone?",
+    "spicy": false
+  },
+  {
+    "id": "truth-22",
+    "category": "TRUTH",
+    "text": "What's the most dramatic exit you've ever made from a party, a date, or a group chat?",
+    "spicy": false
+  },
+  {
+    "id": "truth-23",
+    "category": "TRUTH",
+    "text": "What's your signature move when you want someone to notice you?",
+    "spicy": false
+  },
+  {
+    "id": "truth-24",
+    "category": "TRUTH",
+    "text": "What's a hill you'll die on that nobody asked you to defend?",
+    "spicy": false
+  },
+  {
+    "id": "truth-25",
+    "category": "TRUTH",
+    "text": "What's the most embarrassing way you've ever misread flirting?",
+    "spicy": false
+  },
+  {
+    "id": "truth-26",
+    "category": "TRUTH",
+    "text": "What's a green flag you've ignored because you were too busy chasing red ones?",
+    "spicy": false
+  },
+  {
+    "id": "dare-01",
+    "category": "DARE",
+    "text": "Give someone across the room your best seductive eye contact for 10 seconds.",
+    "spicy": false
+  },
+  {
+    "id": "dare-02",
+    "category": "DARE",
+    "text": "Recreate your dating-app profile photos for the group.",
+    "spicy": false
+  },
+  {
+    "id": "dare-03",
+    "category": "DARE",
+    "text": "Give your best runway walk across the room.",
+    "spicy": false
+  },
+  {
+    "id": "dare-04",
+    "category": "DARE",
+    "text": "Let the group give you a ridiculous nickname for the rest of the night.",
+    "spicy": false
+  },
+  {
+    "id": "dare-05",
+    "category": "DARE",
+    "text": "Do an affectionate impression of someone in the room. They have to guess who.",
+    "spicy": false
+  },
+  {
+    "id": "dare-06",
+    "category": "DARE",
+    "text": "Dramatically perform a text you've sent, or one you make up, in your most theatrical voice.",
+    "spicy": false
+  },
+  {
+    "id": "dare-07",
+    "category": "DARE",
+    "text": "Give a 30-second acceptance speech for an award you absolutely do not deserve.",
+    "spicy": false
+  },
+  {
+    "id": "dare-08",
+    "category": "DARE",
+    "text": "Let the group choose an emoji you must use in your next three texts.",
+    "spicy": false
+  },
+  {
+    "id": "dare-09",
+    "category": "DARE",
+    "text": "Seductively describe an object within reach.",
+    "spicy": false
+  },
+  {
+    "id": "dare-10",
+    "category": "DARE",
+    "text": "Show the group your best flirting technique.",
+    "spicy": false
+  },
+  {
+    "id": "dare-11",
+    "category": "DARE",
+    "text": "Give a dramatic breakup speech to an object in the room.",
+    "spicy": false
+  },
+  {
+    "id": "dare-12",
+    "category": "DARE",
+    "text": "Speak in an accent of the group's choosing until your next prompt.",
+    "spicy": false
+  },
+  {
+    "id": "dare-13",
+    "category": "DARE",
+    "text": "Give someone a compliment as if you're a Victorian poet.",
+    "spicy": false
+  },
+  {
+    "id": "dare-14",
+    "category": "DARE",
+    "text": "Recreate the way you act when you see someone attractive.",
+    "spicy": false
+  },
+  {
+    "id": "dare-15",
+    "category": "DARE",
+    "text": "Make up a new dance move and teach it to the group.",
+    "spicy": false
+  },
+  {
+    "id": "dare-16",
+    "category": "DARE",
+    "text": "Do your best thirst-trap pose for the camera. No photo required.",
+    "spicy": false
+  },
+  {
+    "id": "dare-17",
+    "category": "DARE",
+    "text": "Pretend you're campaigning for president and explain why you're the hottest candidate.",
+    "spicy": false
+  },
+  {
+    "id": "dare-18",
+    "category": "DARE",
+    "text": "Be the sports commentator for the next Jenga pull. Championship-level energy only.",
+    "spicy": false
+  },
+  {
+    "id": "dare-19",
+    "category": "DARE",
+    "text": "Propose to a houseplant, a lamp, or a Jenga block. Make it emotional.",
+    "spicy": false
+  },
+  {
+    "id": "dare-20",
+    "category": "DARE",
+    "text": "Deliver the weather forecast like a flirty news anchor.",
+    "spicy": false
+  },
+  {
+    "id": "dare-21",
+    "category": "DARE",
+    "text": "Walk in slow motion like you just stepped out of a perfume ad.",
+    "spicy": false
+  },
+  {
+    "id": "dare-22",
+    "category": "DARE",
+    "text": "Whisper a boring fact like it's the hottest thing anyone has ever heard.",
+    "spicy": false
+  },
+  {
+    "id": "dare-23",
+    "category": "DARE",
+    "text": "Give a reality-show confessional about the Jenga tower. Name your alliances.",
+    "spicy": false
+  },
+  {
+    "id": "dare-24",
+    "category": "DARE",
+    "text": "Hand out a flattering award to everyone in the room, like Most Likely to Steal the Aux.",
+    "spicy": false
+  },
+  {
+    "id": "dare-25",
+    "category": "DARE",
+    "text": "Pitch a dating app for Jenga blocks. Name it and sell it.",
+    "spicy": false
+  },
+  {
+    "id": "dare-26",
+    "category": "DARE",
+    "text": "Give turn-by-turn GPS directions to your own heart.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-01",
+    "category": "CHAOS",
+    "text": "Everyone who has ever ghosted someone raises their hand.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-02",
+    "category": "CHAOS",
+    "text": "Pick someone to tell you their first impression of you.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-03",
+    "category": "CHAOS",
+    "text": "Everyone points to the person most likely to accidentally get married in Vegas.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-04",
+    "category": "CHAOS",
+    "text": "Choose two people to have a 15-second compliment battle.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-05",
+    "category": "CHAOS",
+    "text": "Everyone votes on who in the room would survive longest on reality TV.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-06",
+    "category": "CHAOS",
+    "text": "Choose someone to invent a new handshake with you.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-07",
+    "category": "CHAOS",
+    "text": "Everyone reveals their most-used emoji.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-08",
+    "category": "CHAOS",
+    "text": "Group vote: who here has the worst taste in people?",
+    "spicy": false
+  },
+  {
+    "id": "chaos-09",
+    "category": "CHAOS",
+    "text": "Pick someone to swap seats with.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-10",
+    "category": "CHAOS",
+    "text": "Everyone who has ever had a situationship raises their hand.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-11",
+    "category": "CHAOS",
+    "text": "The group gives you a new fake job title.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-12",
+    "category": "CHAOS",
+    "text": "Pick two people to act out a romantic movie scene.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-13",
+    "category": "CHAOS",
+    "text": "Everyone shares their most irrational pet peeve.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-14",
+    "category": "CHAOS",
+    "text": "Choose someone to give you a fake horoscope.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-15",
+    "category": "CHAOS",
+    "text": "Group vote: who here would make the best sugar daddy or sugar mommy?",
+    "spicy": false
+  },
+  {
+    "id": "chaos-16",
+    "category": "CHAOS",
+    "text": "Pick someone to be your hype person for the next round.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-17",
+    "category": "CHAOS",
+    "text": "Everyone gives the birthday person one word describing them.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-18",
+    "category": "CHAOS",
+    "text": "The group creates a backstory for the person who just pulled.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-19",
+    "category": "CHAOS",
+    "text": "Everyone says their celebrity crush out loud on three, all at once.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-20",
+    "category": "CHAOS",
+    "text": "Group vote: who here would start a cult by accident?",
+    "spicy": false
+  },
+  {
+    "id": "chaos-21",
+    "category": "CHAOS",
+    "text": "Everyone names their go-to karaoke song. The group picks one to hum together.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-22",
+    "category": "CHAOS",
+    "text": "Pick someone to write your dating-app bio in one sentence.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-23",
+    "category": "CHAOS",
+    "text": "Group vote: who would last longest in a haunted house before bailing?",
+    "spicy": false
+  },
+  {
+    "id": "chaos-24",
+    "category": "CHAOS",
+    "text": "Everyone shares the zodiac stereotype that is most embarrassingly accurate for them.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-25",
+    "category": "CHAOS",
+    "text": "Choose someone to be your life coach for the next 60 seconds. Ask them anything.",
+    "spicy": false
+  },
+  {
+    "id": "chaos-26",
+    "category": "CHAOS",
+    "text": "Everyone names the villain alter ego they would have on a reality show.",
+    "spicy": false
+  },
+  {
+    "id": "spicy-truth-01",
+    "category": "TRUTH",
+    "text": "What's the most chaotic place you've ever kissed someone?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-02",
+    "category": "TRUTH",
+    "text": "What's your most embarrassing hookup story? Edit as needed.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-03",
+    "category": "TRUTH",
+    "text": "What's a turn-on that would surprise this room?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-04",
+    "category": "TRUTH",
+    "text": "What's the best kiss you've ever had, and what made it work?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-05",
+    "category": "TRUTH",
+    "text": "What's your most shameless flirting move, and has it ever actually worked?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-06",
+    "category": "TRUTH",
+    "text": "What's a fantasy you'd be comfortable sharing with this room?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-07",
+    "category": "TRUTH",
+    "text": "What's the most awkward thing that's happened mid-makeout?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-08",
+    "category": "TRUTH",
+    "text": "What's the most memorable thing someone has said to flirt with you?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-09",
+    "category": "TRUTH",
+    "text": "What's the most obvious sign someone was into you that you totally missed?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-10",
+    "category": "TRUTH",
+    "text": "What's a weirdly small thing someone did that made you instantly attracted to them?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-11",
+    "category": "TRUTH",
+    "text": "What's your boldest move at a bar, club, or party, and did it land?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-truth-12",
+    "category": "TRUTH",
+    "text": "What dating trope from queer culture have you absolutely lived through?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-01",
+    "category": "DARE",
+    "text": "Give your best bedroom-voice reading of a recipe, a weather report, or a terms-of-service agreement.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-02",
+    "category": "DARE",
+    "text": "Slow-dance with an imaginary partner like the song is about you.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-03",
+    "category": "DARE",
+    "text": "Give someone a compliment so smooth it sounds like a pickup line. They can fake-swoon.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-04",
+    "category": "DARE",
+    "text": "Strike three poses for a very sultry perfume ad.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-05",
+    "category": "DARE",
+    "text": "Eat a snack like it is a steamy movie scene. Pretend if there is no snack.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-06",
+    "category": "DARE",
+    "text": "Deliver your best pickup line to a Jenga block.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-07",
+    "category": "DARE",
+    "text": "Have a 10-second will-they-won't-they stare-off with someone who is up for it.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-08",
+    "category": "DARE",
+    "text": "Pitch yourself as the hot guest star in the finale of a steamy reality show.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-09",
+    "category": "DARE",
+    "text": "Serenade someone with an improvised love song. Get their OK first, then go extremely dramatic.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-10",
+    "category": "DARE",
+    "text": "Deliver your best \"come here often?\" to the group like it's absolutely going to work.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-11",
+    "category": "DARE",
+    "text": "Do your \"I'm wearing nothing but confidence\" walk. Fully clothed, obviously.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-dare-12",
+    "category": "DARE",
+    "text": "Describe your ideal first kiss like a nature documentary narrator.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-01",
+    "category": "CHAOS",
+    "text": "Group vote: who here gives the best kisser energy?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-02",
+    "category": "CHAOS",
+    "text": "Everyone who has ever sent a flirty text to the wrong person raises their hand.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-03",
+    "category": "CHAOS",
+    "text": "Everyone points to who they would most want to get stuck in an elevator with.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-04",
+    "category": "CHAOS",
+    "text": "Group vote: who is the biggest flirt in the room?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-05",
+    "category": "CHAOS",
+    "text": "Everyone shares the worst pickup line they have ever heard. The group crowns a winner.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-06",
+    "category": "CHAOS",
+    "text": "Everyone describes their type in three words.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-07",
+    "category": "CHAOS",
+    "text": "Pick two people who are up for it to recreate a steamy-movie almost-kiss. PG-13 only.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-08",
+    "category": "CHAOS",
+    "text": "Group vote: who's the best wingperson in the room?",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-09",
+    "category": "CHAOS",
+    "text": "Everyone who has ever had a crush on a friend raises their hand. No names.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-10",
+    "category": "CHAOS",
+    "text": "Choose someone to rate your flirting from 1 to 10 and give you one tip.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-11",
+    "category": "CHAOS",
+    "text": "Everyone shares their most embarrassing flirting fail in exactly one sentence.",
+    "spicy": true
+  },
+  {
+    "id": "spicy-chaos-12",
+    "category": "CHAOS",
+    "text": "Everyone rates their own rizz from 1 to 10, all at once, on three.",
+    "spicy": true
+  }
+]

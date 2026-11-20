@@ -44,18 +44,12 @@ function parseHistoryEntry(value: unknown): HistoryEntry | null {
 /**
  * Turns whatever was in localStorage into a valid state. Corrupt, outdated,
  * or missing data falls back to defaults instead of crashing the app.
- * `knownPromptIds` drops IDs for prompts that no longer exist in the library.
  */
-export function parsePersistedState(
-  raw: unknown,
-  knownPromptIds?: ReadonlySet<string>,
-): PersistedGameState {
+export function parsePersistedState(raw: unknown): PersistedGameState {
   if (!isRecord(raw) || raw.version !== 1) return { ...DEFAULT_PERSISTED_STATE }
 
   const usedIds = Array.isArray(raw.usedIds)
-    ? raw.usedIds.filter(
-        (id): id is string => typeof id === 'string' && (!knownPromptIds || knownPromptIds.has(id)),
-      )
+    ? raw.usedIds.filter((id): id is string => typeof id === 'string')
     : []
 
   const history = Array.isArray(raw.history)

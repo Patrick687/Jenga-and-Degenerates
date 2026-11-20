@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Category {
+  TRUTH
+  DARE
+  CHAOS
+}
+
+model Card {
+  // Seeded cards keep the same IDs the game has always used (e.g. "truth-01"),
+  // so guests' saved progress keeps working. New cards get a generated ID.
+  id        String   @id @default(cuid())
+  category  Category
+  text      String
+  spicy     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category, spicy])
+}

@@ -58,3 +58,9 @@ export function getPromptSizeClass(text: string): string {
   if (text.length <= 120) return 'text-3xl sm:text-4xl'
   return 'text-2xl sm:text-3xl'
 }
+
+/** Drops "already shown" IDs for cards that no longer exist (e.g. deleted in the card manager). */
+export function pruneUsedIds(usedIds: readonly string[], prompts: readonly Prompt[]): string[] {
+  const validIds = new Set(prompts.map((prompt) => prompt.id))
+  return usedIds.filter((id) => validIds.has(id))
+}

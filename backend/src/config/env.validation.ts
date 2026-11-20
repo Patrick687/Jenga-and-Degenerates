@@ -1,0 +1,39 @@
+export interface AppConfig {
+  NODE_ENV: string;
+  PORT: number;
+  HOST: string;
+  ADMIN_PASSWORD: string;
+  CORS_ORIGIN: string[];
+}
+
+export const MIN_ADMIN_PASSWORD_LENGTH = 8;
+
+/** Validates environment variables once at startup so misconfiguration fails fast. */
+export function validateEnv(env: Record<string, unknown>): AppConfig {
+  const password = typeof env.ADMIN_PASSWORD === 'string' ? env.ADMIN_PASSWORD : '';
+  if (password.length < MIN_ADMIN_PASSWORD_LENGTH) {
+    throw new Error(
+      `ADMIN_PASSWORD must be set to at least ${MIN_ADMIN_PASSWORD_LENGTH} characters (see .env.example).`,
+    );
+  }
+
+  const port = Number(env.PORT ?? 4000);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`PORT must be a whole number between 1 and 65535, got "${String(env.PORT)}".`);
+  }
+
+  const corsOrigin =
+    typeof env.CORS_ORIGIN === 'string'
+      ? env.CORS_ORIGIN.split(',')
+          .map((origin) => origin.trim())
+          .filter(Boolean)
+      : [];
+
+  return {
+    NODE_ENV: typeof env.NODE_ENV === 'string' ? env.NODE_ENV : 'development',
+    PORT: port,
+    HOST: typeof env.HOST === 'string' && env.HOST ? env.HOST : '127.0.0.1',
+    ADMIN_PASSWORD: password,
+    CORS_ORIGIN: corsOrigin,
+  };
+}

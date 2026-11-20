@@ -11,11 +11,13 @@ import { TitleBlock } from '../components/game/TitleBlock'
 import { AppShell } from '../components/layout/AppShell'
 import { Header } from '../components/layout/Header'
 import { usePromptGenerator } from '../features/game/hooks/usePromptGenerator'
+import { usePrompts } from '../features/game/hooks/usePrompts'
 
 type Panel = 'history' | 'qr' | 'help' | null
 
 export function GamePage() {
-  const game = usePromptGenerator()
+  const prompts = usePrompts()
+  const game = usePromptGenerator({ prompts })
   const [panel, setPanel] = useState<Panel>(null)
   const closePanel = () => setPanel(null)
 
