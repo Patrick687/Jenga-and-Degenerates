@@ -25,6 +25,10 @@ npm ci --no-audit --no-fund
 echo "==> Building"
 npm run build
 
+# The running API keeps the SQLite file open, which blocks migrations ("database is locked").
+echo "==> Stopping the API"
+sudo -n systemctl stop jenga-api
+
 echo "==> Applying database migrations"
 npm run db:migrate
 
@@ -40,8 +44,8 @@ elif [ "$FIRST_RUN" = true ]; then
   npm run db:seed
 fi
 
-echo "==> Restarting the API"
-sudo -n systemctl restart jenga-api
+echo "==> Starting the API"
+sudo -n systemctl start jenga-api
 
 echo "==> Waiting for it to come up"
 for attempt in 1 2 3 4 5 6 7 8 9 10; do
