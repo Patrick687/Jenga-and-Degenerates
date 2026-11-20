@@ -112,14 +112,14 @@ Backend notes: password goes in an `Authorization: Bearer` header and wrong gues
 
 ## Assassin game (`/assassin`)
 
-A second game that runs all night alongside Jenga. Guests scan the **door QR code** for `https://assassin.codewithpatrick.dev` (open `/assassin/host`, sign in with the admin password, and download or print it), enter a name, watch a short welcome animation, and see their secret role.
+A second game that runs all night alongside Jenga. Guests scan the **door QR code** for `https://assassin.codewithpatrick.dev` (open `/admin?tab=assassin`, sign in with the admin password, and download or print it), enter a name, watch a short welcome animation, and see their secret role.
 
 - **Roles:** guests are grouped in batches of 7 as they sign in. Each batch has exactly one assassin, decided at sign-up. An assassin can decline until their first kill, and the role passes to another guest in their batch (or to the next person to join).
 - **Winking:** an assassin winks at someone, then logs the kill in the app. The victim sees a "die dramatically" screen and everyone else sees a notice (never who did it). Assassins can only strike every 12 minutes (`ASSASSIN_COOLDOWN_MINUTES`) and can see each other.
 - **Voting:** any living guest can call a vote. Living guests pick who they think is an assassin for 2 minutes (`VOTE_SECONDS`), or until everyone has voted. A pick needs at least two votes and a majority; they are eliminated and their role is revealed.
 - **Leaving:** guests can mark that they left (and came back). People who left can't strike, be struck, or vote.
 - **Alerts:** banners, a beep and a vibration appear while the page is open (iPhones don't vibrate from the web). There are no push notifications, so a locked phone won't buzz. The page re-checks every 3 seconds and catches up when reopened.
-- **Host tools** (`/assassin/host`): QR code, every guest with roles (hidden by default), eliminate or revive, change a role, remove a guest, end a vote, reset the whole game.
+- **Host tools** (`/admin`, Assassin tab): QR code, every guest with roles (hidden by default), eliminate or revive, change a role, remove a guest, end a vote, reset the whole game.
 
 Guests are recognised by a secret token stored on their phone. Nobody can see another guest's role through the API; only assassins see their fellow assassins. Game data lives in the same SQLite database and is not touched by card reseeding.
 

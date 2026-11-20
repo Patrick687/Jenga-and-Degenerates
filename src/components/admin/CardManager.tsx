@@ -1,12 +1,10 @@
-import { ArrowLeft, LogOut, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router'
 import type { CardDraft } from '../../features/cards/api/cardsApi'
 import { useCardManager } from '../../features/cards/hooks/useCardManager'
 import { countCards, DEFAULT_FILTERS, filterCards, type CardFilters } from '../../features/cards/utils/cardFilters'
 import type { Prompt } from '../../features/game/types/game.types'
 import { Button } from '../ui/Button'
-import { IconButton } from '../ui/IconButton'
 import { CardEditorModal } from './CardEditorModal'
 import { CardFiltersBar } from './CardFilters'
 import { CardRow } from './CardRow'
@@ -50,27 +48,6 @@ export function CardManager({ password, onLogout }: CardManagerProps) {
 
   return (
     <>
-      <header className="flex items-center justify-between gap-3 px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
-        <Link
-          to="/"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-plum px-4 text-sm font-semibold hover:bg-white/10"
-        >
-          <ArrowLeft aria-hidden className="size-4" />
-          Game
-        </Link>
-        <div className="flex items-center gap-2">
-          <Link
-            to="/assassin/host"
-            className="inline-flex min-h-11 items-center rounded-full border border-white/10 bg-plum px-4 text-sm font-semibold hover:bg-white/10"
-          >
-            Assassin host
-          </Link>
-          <IconButton label="Log out" onClick={onLogout}>
-            <LogOut aria-hidden className="size-5" />
-          </IconButton>
-        </div>
-      </header>
-
       <main className="flex flex-1 flex-col gap-5 px-5 pt-3 pb-36">
         <div>
           <h1 className="font-display text-4xl font-bold tracking-tight">Card manager</h1>
