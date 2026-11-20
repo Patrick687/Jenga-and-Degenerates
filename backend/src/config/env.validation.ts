@@ -4,9 +4,23 @@ export interface AppConfig {
   HOST: string;
   ADMIN_PASSWORD: string;
   CORS_ORIGIN: string[];
+  /** Assassin game: minutes an assassin must wait between kills. */
+  ASSASSIN_COOLDOWN_MINUTES: number;
+  /** Assassin game: how long a vote stays open. */
+  VOTE_SECONDS: number;
 }
 
 export const MIN_ADMIN_PASSWORD_LENGTH = 8;
+
+function positiveInt(env: Record<string, unknown>, name: string, fallback: number): number {
+  const raw = env[name];
+  if (raw === undefined || raw === '') return fallback;
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`${name} must be a whole number of 1 or more, got "${String(raw)}".`);
+  }
+  return value;
+}
 
 /** Validates environment variables once at startup so misconfiguration fails fast. */
 export function validateEnv(env: Record<string, unknown>): AppConfig {
@@ -35,5 +49,7 @@ export function validateEnv(env: Record<string, unknown>): AppConfig {
     HOST: typeof env.HOST === 'string' && env.HOST ? env.HOST : '127.0.0.1',
     ADMIN_PASSWORD: password,
     CORS_ORIGIN: corsOrigin,
+    ASSASSIN_COOLDOWN_MINUTES: positiveInt(env, 'ASSASSIN_COOLDOWN_MINUTES', 12),
+    VOTE_SECONDS: positiveInt(env, 'VOTE_SECONDS', 120),
   };
 }

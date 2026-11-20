@@ -40,16 +40,19 @@ interface RequestOptions {
   variables?: Record<string, unknown>
   /** Admin password; sent as a Bearer token. */
   password?: string
+  /** Assassin game guest token; sent as X-Player-Token. */
+  playerToken?: string
   signal?: AbortSignal
 }
 
 /** Minimal GraphQL-over-fetch client. Returns the raw `data` object for the caller to validate. */
 export async function graphqlRequest(
   query: string,
-  { variables, password, signal }: RequestOptions = {},
+  { variables, password, playerToken, signal }: RequestOptions = {},
 ): Promise<Record<string, unknown>> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   if (password) headers.Authorization = `Bearer ${password}`
+  if (playerToken) headers['X-Player-Token'] = playerToken
 
   let response: Response
   try {

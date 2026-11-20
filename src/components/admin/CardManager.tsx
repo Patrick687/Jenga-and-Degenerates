@@ -58,9 +58,17 @@ export function CardManager({ password, onLogout }: CardManagerProps) {
           <ArrowLeft aria-hidden className="size-4" />
           Game
         </Link>
-        <IconButton label="Log out" onClick={onLogout}>
-          <LogOut aria-hidden className="size-5" />
-        </IconButton>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/assassin/host"
+            className="inline-flex min-h-11 items-center rounded-full border border-white/10 bg-plum px-4 text-sm font-semibold hover:bg-white/10"
+          >
+            Assassin host
+          </Link>
+          <IconButton label="Log out" onClick={onLogout}>
+            <LogOut aria-hidden className="size-5" />
+          </IconButton>
+        </div>
       </header>
 
       <main className="flex flex-1 flex-col gap-5 px-5 pt-3 pb-36">
