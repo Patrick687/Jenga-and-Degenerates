@@ -25,3 +25,120 @@ model Card {
 
   @@index([category, spicy])
 }
+
+// ---------------------------------------------------------------------------
+// Assassin party game
+// ---------------------------------------------------------------------------
+
+enum Role {
+  INNOCENT
+  ASSASSIN
+}
+
+enum LifeStatus {
+  ALIVE
+  DEAD
+}
+
+enum DeathReason {
+  ASSASSINATED
+  VOTED_OUT
+  HOST
+}
+
+enum EventKind {
+  JOINED
+  KILLED
+  VOTE_STARTED
+  VOTE_RESULT
+  LEFT
+  RETURNED
+  ROLE_ASSIGNED
+  HOST
+}
+
+enum VoteStatus {
+  OPEN
+  CLOSED
+}
+
+/// Guests are grouped in batches of 7. Each batch gets exactly one secret assassin slot.
+model PartyBatch {
+  id              String   @id @default(cuid())
+  /// The join position (1-7) that becomes the assassin. 0 once the slot is spent or declined.
+  assassinSlot    Int
+  /// True while a declined assassin role is waiting for the next joiner.
+  assassinPending Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  players         Player[]
+}
+
+model Player {
+  id               String       @id @default(cuid())
+  name             String
+  nameKey          String       @unique
+  /// Secret that identifies this guest's device. Never returned to anyone else.
+  token            String       @unique
+  batchId          String
+  batch            PartyBatch   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  position         Int
+  role             Role         @default(INNOCENT)
+  declinedAssassin Boolean      @default(false)
+  status           LifeStatus   @default(ALIVE)
+  /// False once the guest has marked that they left the party.
+  present          Boolean      @default(true)
+  /// Assassins only: the earliest time they may strike again.
+  nextKillAt       DateTime?
+  deathReason      DeathReason?
+  diedAt           DateTime?
+  killedById       String?
+  killedBy         Player?      @relation("Kills", fields: [killedById], references: [id], onDelete: SetNull)
+  kills            Player[]     @relation("Kills")
+  createdAt        DateTime     @default(now())
+  ballotsCast      Ballot[]     @relation("Voter")
+  votesReceived    Ballot[]     @relation("Candidate")
+  votesStarted     Vote[]       @relation("Caller")
+  eliminatedIn     Vote[]       @relation("Eliminated")
+
+  @@index([batchId])
+}
+
+model Vote {
+  id           String     @id @default(cuid())
+  startedById  String
+  startedBy    Player     @relation("Caller", fields: [startedById], references: [id], onDelete: Cascade)
+  startedAt    DateTime
+  endsAt       DateTime
+  status       VoteStatus @default(OPEN)
+  closedAt     DateTime?
+  eliminatedId String?
+  eliminated   Player?    @relation("Eliminated", fields: [eliminatedId], references: [id], onDelete: SetNull)
+  ballots      Ballot[]
+
+  @@index([status])
+}
+
+model Ballot {
+  id          String   @id @default(cuid())
+  voteId      String
+  vote        Vote     @relation(fields: [voteId], references: [id], onDelete: Cascade)
+  voterId     String
+  voter       Player   @relation("Voter", fields: [voterId], references: [id], onDelete: Cascade)
+  candidateId String
+  candidate   Player   @relation("Candidate", fields: [candidateId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([voteId, voterId])
+  @@index([candidateId])
+}
+
+/// Public activity feed (audienceId null) plus private notices for one player.
+model GameEvent {
+  id         Int       @id @default(autoincrement())
+  kind       EventKind
+  message    String
+  audienceId String?
+  createdAt  DateTime  @default(now())
+
+  @@index([audienceId])
+}

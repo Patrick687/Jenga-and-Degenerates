@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { AssassinModule } from './assassin/assassin.module';
 import { AuthModule } from './auth/auth.module';
 import { CardsModule } from './cards/cards.module';
 import { validateEnv } from './config/env.validation';
@@ -25,6 +26,7 @@ const isProduction = process.env.NODE_ENV === 'production';
     PrismaModule,
     AuthModule,
     CardsModule,
+    AssassinModule,
   ],
   controllers: [HealthController],
 })

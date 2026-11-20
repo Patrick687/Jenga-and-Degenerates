@@ -5,9 +5,16 @@ import { Button } from '../ui/Button'
 
 interface AdminLoginProps {
   onLogin: (password: string) => Promise<string | null>
+  /** Two-line heading, e.g. ['Card', 'manager']. */
+  heading?: readonly [string, string]
+  description?: string
 }
 
-export function AdminLogin({ onLogin }: AdminLoginProps) {
+export function AdminLogin({
+  onLogin,
+  heading = ['Card', 'manager'],
+  description = 'Hosts only. Enter the admin password to edit the deck.',
+}: AdminLoginProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -33,11 +40,11 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
           <Lock aria-hidden className="size-7" />
         </span>
         <h1 className="font-display text-5xl leading-[0.95] font-bold tracking-tighter">
-          Card
+          {heading[0]}
           <br />
-          manager
+          {heading[1]}
         </h1>
-        <p className="mt-4 text-lg text-mist">Hosts only. Enter the admin password to edit the deck.</p>
+        <p className="mt-4 text-lg text-mist">{description}</p>
       </div>
 
       <form onSubmit={(event) => void submit(event)} className="space-y-4">
