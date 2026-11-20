@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { GameEvent } from '../types'
 import { deriveEventAlerts, latestEventId } from './alerts'
+import { resolveJoinUrl } from './joinUrl'
 import { parseAssassinState } from './parseState'
 import { formatCountdown, minutesLabel, remainingMs, timeAgo } from './time'
 
@@ -105,5 +106,16 @@ describe('time helpers', () => {
     expect(timeAgo(0, 10_000)).toBe('just now')
     expect(timeAgo(0, 180_000)).toBe('3 min ago')
     expect(timeAgo(0, 7_300_000)).toBe('2 h ago')
+  })
+})
+
+describe('resolveJoinUrl', () => {
+  it('prefers the dedicated assassin address', () => {
+    expect(resolveJoinUrl(' https://assassin.example.com ', 'https://jenga.example.com')).toBe('https://assassin.example.com')
+  })
+
+  it('falls back to /assassin on the main site', () => {
+    expect(resolveJoinUrl(undefined, 'https://jenga.example.com/')).toBe('https://jenga.example.com/assassin')
+    expect(resolveJoinUrl('', 'https://jenga.example.com')).toBe('https://jenga.example.com/assassin')
   })
 })

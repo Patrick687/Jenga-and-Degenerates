@@ -58,6 +58,8 @@ jobs:
         env:
           # Baked into the build so the QR code points at the real domain.
           VITE_PUBLIC_APP_URL: https://jenga.codewithpatrick.dev
+          # The Assassin game's own address, used for the door QR code on /assassin/host.
+          VITE_ASSASSIN_URL: https://assassin.codewithpatrick.dev
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2

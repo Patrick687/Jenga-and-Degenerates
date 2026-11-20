@@ -1,6 +1,5 @@
-import { ArrowLeft, Check, Download, Eye, EyeOff, Link2, LogOut } from 'lucide-react'
+import { Check, Download, Eye, EyeOff, Link2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router'
 import {
   adminEndVote,
   adminRemovePlayer,
@@ -8,13 +7,13 @@ import {
   adminSetRole,
   adminSetStatus,
 } from '../../features/assassin/api/assassinApi'
+import { resolveJoinUrl } from '../../features/assassin/utils/joinUrl'
 import { useHostPlayers } from '../../features/assassin/hooks/useHostPlayers'
 import type { AdminPlayer } from '../../features/assassin/types'
 import { GraphQLRequestError } from '../../lib/graphql'
 import { downloadDataUrl, generateQrDataUrl, getPublicUrl } from '../../lib/qrCode'
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 import { Button } from '../ui/Button'
-import { IconButton } from '../ui/IconButton'
 import { Modal } from '../ui/Modal'
 
 interface HostConsoleProps {
@@ -23,12 +22,7 @@ interface HostConsoleProps {
 }
 
 function joinUrl(): string {
-  const base = getPublicUrl().url
-  try {
-    return new URL('/assassin', base).toString()
-  } catch {
-    return `${base.replace(/\/$/, '')}/assassin`
-  }
+  return resolveJoinUrl(import.meta.env.VITE_ASSASSIN_URL, getPublicUrl().url)
 }
 
 function describe(player: AdminPlayer): string {
@@ -75,22 +69,9 @@ export function HostConsole({ password, onLogout }: HostConsoleProps) {
 
   return (
     <>
-      <header className="flex items-center justify-between gap-3 px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
-        <Link
-          to="/admin"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-plum px-4 text-sm font-semibold hover:bg-white/10"
-        >
-          <ArrowLeft aria-hidden className="size-4" />
-          Cards
-        </Link>
-        <IconButton label="Log out" onClick={onLogout}>
-          <LogOut aria-hidden className="size-5" />
-        </IconButton>
-      </header>
-
       <main className="flex flex-1 flex-col gap-6 px-5 pt-3 pb-12">
         <div>
-          <h1 className="font-display text-4xl font-bold tracking-tight">Assassin host</h1>
+          <h1 className="font-display text-4xl font-bold tracking-tight">Assassin game</h1>
           <p className="mt-2 text-sm text-mist">
             {players ? `${players.length} guests · ${alive} alive · ${assassins} assassins alive` : 'Loading…'}
           </p>

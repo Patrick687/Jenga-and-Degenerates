@@ -1,7 +1,68 @@
+import { ArrowLeft, LogOut } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router'
 import { AdminLogin } from '../components/admin/AdminLogin'
 import { CardManager } from '../components/admin/CardManager'
+import { HostConsole } from '../components/assassin/HostConsole'
 import { AppShell } from '../components/layout/AppShell'
+import { IconButton } from '../components/ui/IconButton'
 import { useAdminSession } from '../features/cards/hooks/useAdminSession'
+
+type Section = 'cards' | 'assassin'
+
+const SECTIONS: ReadonlyArray<{ id: Section; label: string }> = [
+  { id: 'cards', label: 'Jenga cards' },
+  { id: 'assassin', label: 'Assassin' },
+]
+
+interface AdminHomeProps {
+  password: string
+  onLogout: () => void
+}
+
+/** One host area for both games. `?tab=assassin` opens the Assassin tools directly. */
+function AdminHome({ password, onLogout }: AdminHomeProps) {
+  const [params, setParams] = useSearchParams()
+  const section: Section = params.get('tab') === 'assassin' ? 'assassin' : 'cards'
+
+  return (
+    <>
+      <header className="flex items-center justify-between gap-3 px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
+        <Link
+          to="/"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 bg-plum px-4 text-sm font-semibold hover:bg-white/10"
+        >
+          <ArrowLeft aria-hidden className="size-4" />
+          Game
+        </Link>
+        <IconButton label="Log out" onClick={onLogout}>
+          <LogOut aria-hidden className="size-5" />
+        </IconButton>
+      </header>
+
+      <div role="group" aria-label="Section" className="mx-5 mt-2 grid grid-cols-2 gap-2 rounded-2xl border border-white/10 bg-plum p-1.5">
+        {SECTIONS.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={section === id}
+            onClick={() => setParams(id === 'cards' ? {} : { tab: id }, { replace: true })}
+            className={`min-h-11 rounded-xl font-display text-sm font-bold transition active:scale-95 ${
+              section === id ? 'bg-hot text-ink' : 'text-mist hover:bg-white/10 hover:text-paper'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {section === 'cards' ? (
+        <CardManager password={password} onLogout={onLogout} />
+      ) : (
+        <HostConsole password={password} onLogout={onLogout} />
+      )}
+    </>
+  )
+}
 
 export function AdminPage() {
   const { session, login, logout } = useAdminSession()
@@ -9,11 +70,15 @@ export function AdminPage() {
   return (
     <AppShell>
       {session.status === 'authenticated' ? (
-        <CardManager password={session.password} onLogout={logout} />
+        <AdminHome password={session.password} onLogout={logout} />
       ) : session.status === 'checking' ? (
         <p className="flex flex-1 items-center justify-center text-mist">Checking…</p>
       ) : (
-        <AdminLogin onLogin={login} />
+        <AdminLogin
+          onLogin={login}
+          heading={['Host', 'tools']}
+          description="Hosts only. Enter the admin password to manage the Jenga cards and the Assassin game."
+        />
       )}
     </AppShell>
   )
