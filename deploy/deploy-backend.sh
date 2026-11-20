@@ -3,6 +3,9 @@
 # has been rsynced to /var/www/jenga-api. Safe to run repeatedly.
 set -euo pipefail
 
+# The backend needs Node 22+, installed side by side so other apps keep the system Node.
+export PATH=/opt/node-22/bin:$PATH
+
 APP_DIR=/var/www/jenga-api
 cd "$APP_DIR"
 
