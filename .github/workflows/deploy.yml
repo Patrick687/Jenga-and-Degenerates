@@ -14,6 +14,12 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # While the deck is still being written in code: every deploy wipes the cards
+  # in the database and reloads backend/prisma/seed-cards.json. Edits made in
+  # /admin are overwritten. Change to 'false' to keep /admin edits across deploys.
+  RESEED_CARDS: 'true'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -75,7 +81,7 @@ jobs:
             ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }}:/var/www/jenga-api/
 
       - name: Install, migrate and restart backend
-        run: ssh ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} 'bash -s' < deploy/deploy-backend.sh
+        run: ssh ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "RESEED_CARDS=${{ env.RESEED_CARDS }} bash -s" < deploy/deploy-backend.sh
 
       - name: Deploy frontend with rsync
         run: |

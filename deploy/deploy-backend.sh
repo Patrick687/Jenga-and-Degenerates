@@ -28,9 +28,14 @@ npm run build
 echo "==> Applying database migrations"
 npm run db:migrate
 
-# Seed the starter cards only when the database is brand new, so cards you
-# deleted on purpose never come back on a later deploy.
-if [ "$FIRST_RUN" = true ]; then
+# Seed the starter cards when the database is brand new. If RESEED_CARDS=true
+# (set in the workflow), also wipe and reload them from backend/prisma/seed-cards.json
+# on every deploy, so the cards always match what is committed. That overwrites
+# anything added or edited in /admin.
+if [ "${RESEED_CARDS:-false}" = true ]; then
+  echo "==> Reseeding cards from the committed list (RESEED_CARDS=true)"
+  npm run db:seed -- --force
+elif [ "$FIRST_RUN" = true ]; then
   echo "==> First run: seeding starter cards"
   npm run db:seed
 fi
