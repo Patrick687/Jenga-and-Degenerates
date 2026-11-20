@@ -116,7 +116,7 @@ Edit the arrays in `src/features/game/data/`. Keep prompts short, standalone, an
 
 ## Automatic deploys (GitHub Actions + DigitalOcean)
 
-Every push to `main` runs `.github/workflows/deploy.yml`: test the frontend and backend, build the frontend with `VITE_PUBLIC_APP_URL=https://jenga.codewithpatrick.dev`, rsync the backend source to `/var/www/jenga-api/`, run `deploy/deploy-backend.sh` on the droplet (install, build, `prisma migrate deploy`, seed on first run only, restart the `jenga-api` systemd service, health check), then rsync `dist/` to `/var/www/jenga/`.
+Every push to `main` runs `.github/workflows/deploy.yml`: test the frontend and backend, build the frontend with `VITE_PUBLIC_APP_URL=https://jenga.codewithpatrick.dev`, rsync the backend source to `/var/www/jenga-api/`, run `deploy/deploy-backend.sh` on the droplet (install, build, `prisma migrate deploy`, seed on first run, and reseed from `seed-cards.json` on every deploy while `RESEED_CARDS` is `'true'` in the workflow (set it to `'false'` to keep `/admin` edits), restart the `jenga-api` systemd service, health check), then rsync `dist/` to `/var/www/jenga/`.
 
 **GitHub repo secrets required:** `SSH_PRIVATE_KEY`, `DROPLET_IP`, `DROPLET_USERNAME`.
 
