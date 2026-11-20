@@ -116,8 +116,10 @@ Edit the arrays in `src/features/game/data/`. Keep prompts short, standalone, an
 
 ## Automatic deploys (GitHub Actions + DigitalOcean)
 
-Every push to `main` runs `.github/workflows/deploy.yml`: install, test, build with `VITE_PUBLIC_APP_URL=https://jenga.codewithpatrick.dev`, then rsync `dist/` to `/var/www/jenga/` on the droplet over SSH.
+Every push to `main` runs `.github/workflows/deploy.yml`: test the frontend and backend, build the frontend with `VITE_PUBLIC_APP_URL=https://jenga.codewithpatrick.dev`, rsync the backend source to `/var/www/jenga-api/`, run `deploy/deploy-backend.sh` on the droplet (install, build, `prisma migrate deploy`, seed on first run only, restart the `jenga-api` systemd service, health check), then rsync `dist/` to `/var/www/jenga/`.
 
-**GitHub repo secrets required** (Settings → Secrets and variables → Actions): `SSH_PRIVATE_KEY`, `DROPLET_IP`, `DROPLET_USERNAME`.
+**GitHub repo secrets required:** `SSH_PRIVATE_KEY`, `DROPLET_IP`, `DROPLET_USERNAME`.
 
-**One-time server setup:** create `/var/www/jenga` owned by the deploy user, install `deploy/nginx-jenga.conf` as an nginx site, add a DNS A record for `jenga`, and run `sudo certbot --nginx -d jenga.codewithpatrick.dev`.
+**One-time server setup:**
+- Frontend: create `/var/www/jenga` owned by the deploy user, install `deploy/nginx-jenga.conf` as an nginx site, add a DNS A record for `jenga`, run `sudo certbot --nginx -d jenga.codewithpatrick.dev`.
+- Backend: Node.js 22+; `/var/www/jenga-api` and `/var/lib/jenga-api` owned by the deploy user; `/var/www/jenga-api/.env` (mode 600) with `ADMIN_PASSWORD`, `DATABASE_URL=file:/var/lib/jenga-api/jenga.db`, `PORT=4000`, `HOST=127.0.0.1`; `deploy/jenga-api.service` installed in systemd; `deploy/nginx-jenga-api.conf` saved as `/etc/nginx/snippets/jenga-api.conf` and included in the site; passwordless sudo for `systemctl restart jenga-api` and `journalctl -u jenga-api`.

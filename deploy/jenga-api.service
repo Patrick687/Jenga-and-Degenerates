@@ -1,0 +1,19 @@
+# One-time setup on the droplet. Copy to /etc/systemd/system/jenga-api.service
+# and replace YOUR_DEPLOY_USER (the output of `whoami`) and, if needed, the node path
+# (output of `which node`).
+[Unit]
+Description=Jenga & Degenerates API
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_DEPLOY_USER
+WorkingDirectory=/var/www/jenga-api
+EnvironmentFile=/var/www/jenga-api/.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node dist/src/main.js
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
