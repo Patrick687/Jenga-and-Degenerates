@@ -8,6 +8,7 @@ import {
   adminSetRole,
   adminSetStatus,
 } from '../../features/assassin/api/assassinApi'
+import { resolveJoinUrl } from '../../features/assassin/utils/joinUrl'
 import { useHostPlayers } from '../../features/assassin/hooks/useHostPlayers'
 import type { AdminPlayer } from '../../features/assassin/types'
 import { GraphQLRequestError } from '../../lib/graphql'
@@ -23,12 +24,7 @@ interface HostConsoleProps {
 }
 
 function joinUrl(): string {
-  const base = getPublicUrl().url
-  try {
-    return new URL('/assassin', base).toString()
-  } catch {
-    return `${base.replace(/\/$/, '')}/assassin`
-  }
+  return resolveJoinUrl(import.meta.env.VITE_ASSASSIN_URL, getPublicUrl().url)
 }
 
 function describe(player: AdminPlayer): string {
