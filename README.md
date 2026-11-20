@@ -102,7 +102,7 @@ cd backend
 npm install
 cp .env.example .env        # then set ADMIN_PASSWORD (8+ characters)
 npm run db:migrate          # creates the SQLite database
-npm run db:seed             # loads the 114 starter cards (only into an empty database)
+npm run db:seed             # loads the 122 starter cards (only into an empty database)
 npm run start:dev           # http://127.0.0.1:4000/graphql
 ```
 
