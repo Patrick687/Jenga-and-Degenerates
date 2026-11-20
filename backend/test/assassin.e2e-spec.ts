@@ -27,6 +27,13 @@ interface Guest {
   role: string;
 }
 
+/**
+ * Random draws that make the assassin land on a given seat (1-7) of a group.
+ * Each guest joining a group without an assassin draws once; 0 means "you're the assassin",
+ * and the last seat needs no draw because it is certain.
+ */
+const seatDraws = (slot: number): number[] => [...Array<number>(slot - 1).fill(1), ...(slot < 7 ? [0] : [])];
+
 describe('Assassin game', () => {
   let t: TestApp;
 
@@ -50,7 +57,7 @@ describe('Assassin game', () => {
 
   /** Joins `count` guests. The first group's assassin lands on `slot` (1-7). */
   async function joinMany(count: number, slot = 3, prefix = 'Guest'): Promise<Guest[]> {
-    t.random.queue(slot - 1);
+    t.random.queue(...seatDraws(slot));
     const guests: Guest[] = [];
     for (let i = 1; i <= count; i += 1) guests.push(await join(`${prefix} ${i}`));
     return guests;
@@ -60,7 +67,7 @@ describe('Assassin game', () => {
 
   describe('joining and roles', () => {
     it('gives exactly one assassin per group of 7, decided at sign-up', async () => {
-      t.random.queue(2, 6); // group 1 slot 3, group 2 slot 7
+      t.random.queue(...seatDraws(3), ...seatDraws(7)); // group 1 seat 3, group 2 seat 7
       const guests: Guest[] = [];
       for (let i = 1; i <= 14; i += 1) guests.push(await join(`Guest ${i}`));
 
@@ -95,7 +102,7 @@ describe('Assassin game', () => {
 
   describe('secrecy', () => {
     it('lets assassins see each other and nobody else', async () => {
-      t.random.queue(0, 1); // group 1 slot 1, group 2 slot 2
+      t.random.queue(...seatDraws(1), ...seatDraws(2)); // group 1 seat 1, group 2 seat 2
       const guests: Guest[] = [];
       for (let i = 1; i <= 9; i += 1) guests.push(await join(`Guest ${i}`));
       const [a, innocent, b] = [guests[0]!, guests[1]!, guests[8]!];
@@ -161,7 +168,7 @@ describe('Assassin game', () => {
     });
 
     it('does not let assassins target each other, the dead, or people who left', async () => {
-      t.random.queue(0, 1);
+      t.random.queue(...seatDraws(1), ...seatDraws(2));
       const guests: Guest[] = [];
       for (let i = 1; i <= 9; i += 1) guests.push(await join(`Guest ${i}`));
       const [a, b, c, d] = [guests[0]!, guests[8]!, guests[1]!, guests[2]!];

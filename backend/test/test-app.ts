@@ -66,7 +66,7 @@ function createMigratedDatabase(): { url: string; dir: string } {
   return { url: `file:${file}`, dir };
 }
 
-export async function createTestApp(): Promise<TestApp> {
+export async function createTestApp(options: { realRandom?: boolean } = {}): Promise<TestApp> {
   const database = createMigratedDatabase();
   process.env.DATABASE_URL = database.url;
   process.env.ADMIN_PASSWORD = ADMIN_PASSWORD;
@@ -83,7 +83,7 @@ export async function createTestApp(): Promise<TestApp> {
     .overrideProvider(GameClock)
     .useValue(clock)
     .overrideProvider(GameRandom)
-    .useValue(random)
+    .useValue(options.realRandom ? new GameRandom() : random)
     .compile();
   const app = moduleRef.createNestApplication();
   configureApp(app);

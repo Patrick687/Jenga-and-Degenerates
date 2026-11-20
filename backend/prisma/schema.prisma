@@ -62,10 +62,10 @@ enum VoteStatus {
   CLOSED
 }
 
-/// Guests are grouped in batches of 7. Each batch gets exactly one secret assassin slot.
+/// Guests are grouped in batches of 7. Each batch gets exactly one assassin.
 model PartyBatch {
   id              String   @id @default(cuid())
-  /// The join position (1-7) that becomes the assassin. 0 once the slot is spent or declined.
+  /// No longer used (always 0). Assassins are now picked at sign-up with chance 1 in (seats left).
   assassinSlot    Int
   /// True while a declined assassin role is waiting for the next joiner.
   assassinPending Boolean  @default(false)

@@ -64,21 +64,22 @@ export class AssassinService {
         let batch = batches.find((candidate) => candidate._count.players < BATCH_SIZE);
         let size = batch?._count.players ?? 0;
         if (!batch) {
-          const created = await tx.partyBatch.create({
-            data: { assassinSlot: this.random.int(BATCH_SIZE) + 1, createdAt: now },
-          });
+          const created = await tx.partyBatch.create({ data: { assassinSlot: 0, createdAt: now } });
           batch = { ...created, _count: { players: 0 } };
           size = 0;
         }
 
-        const position = size + 1;
-        const isAssassin = batch.assassinPending || position === batch.assassinSlot;
-        if (isAssassin) {
-          await tx.partyBatch.update({
-            where: { id: batch.id },
-            data: { assassinPending: false, assassinSlot: 0 },
-          });
+        // Every group needs one assassin. A guest who joins a group that has none yet gets the role with
+        // chance 1 in (seats left), so each seat is equally likely and the last seat is certain.
+        // This looks at who is actually in the group, so people leaving or being removed never skews it.
+        const hasAssassin = (await tx.player.count({ where: { batchId: batch.id, role: Role.ASSASSIN } })) > 0;
+        const seatsLeft = BATCH_SIZE - size;
+        const isAssassin =
+          batch.assassinPending || (!hasAssassin && (seatsLeft === 1 || this.random.int(seatsLeft) === 0));
+        if (batch.assassinPending && isAssassin) {
+          await tx.partyBatch.update({ where: { id: batch.id }, data: { assassinPending: false } });
         }
+        const position = size + 1;
 
         const created = await tx.player.create({
           data: {
@@ -144,10 +145,7 @@ export class AssassinService {
         );
       } else {
         // Nobody to hand it to yet: the next guest in this group gets the role.
-        await tx.partyBatch.update({
-          where: { id: me.batchId },
-          data: { assassinPending: true, assassinSlot: 0 },
-        });
+        await tx.partyBatch.update({ where: { id: me.batchId }, data: { assassinPending: true } });
       }
     });
   }
