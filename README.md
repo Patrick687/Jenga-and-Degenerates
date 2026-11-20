@@ -1,10 +1,10 @@
 # Jenga & Degenerates (29 & UNHINGED)
 
-A party-game web app for a 29th birthday, played alongside a physical Jenga tower. Guests scan a QR code, open the site on their phones, and get a **Truth**, **Dare**, or **Chaos** prompt whenever they pull a block. No accounts, no names, no backend, no moderator. Everyone's game state lives on their own phone.
+A party-game web app for a 29th birthday, played alongside a physical Jenga tower. Guests scan a QR code, open the site on their phones, and get a **Truth**, **Dare**, or **Chaos** prompt whenever they pull a block. Guests need no accounts and no names; everyone's game state lives on their own phone. Hosts can add, edit, and delete cards from a password-protected page at `/admin`, backed by a small GraphQL API.
 
 ## Tech
 
-React 19, TypeScript (strict), Vite, Tailwind CSS v4, Lucide icons, `qrcode`, Vitest. Fonts (Space Grotesk, DM Sans) are bundled, so the app doesn't depend on Google Fonts at the party.
+Frontend: React 19, TypeScript (strict), Vite, Tailwind CSS v4, react-router, Lucide icons, `qrcode`, Vitest. Backend (`backend/`): NestJS, GraphQL (code-first, Apollo), Prisma ORM, SQLite. Fonts (Space Grotesk, DM Sans) are bundled, so the app doesn't depend on Google Fonts at the party.
 
 ## Setup
 
@@ -50,7 +50,7 @@ Scan the printed code with a phone before the party.
 
 ## Deploy as a static site
 
-`npm run build` produces a static `dist/` folder. There is no server code and no router, so any static host works. The build uses relative asset paths, so it also works from a sub-folder.
+`npm run build` produces a static `dist/` folder. The game itself is static and falls back to the bundled cards if the API is unreachable. The site must be served from a domain root, and unknown paths (such as `/admin`) must fall back to `index.html` (nginx: `try_files $uri /index.html`). `/graphql` must be proxied to the backend, or set `VITE_API_URL`.
 
 - **Netlify:** drag `dist/` onto app.netlify.com/drop, or connect the repo with build command `npm run build` and publish directory `dist`. Set `VITE_PUBLIC_APP_URL` in the site's environment variables.
 - **Vercel:** import the repo (Vite is auto-detected) and set `VITE_PUBLIC_APP_URL` in project environment variables.
@@ -91,7 +91,26 @@ src/
 
 Prompt selection lives in `features/game/utils/promptSelector.ts` as a pure function that takes an injectable random source, which is how the tests make it deterministic.
 
-## Adding or editing prompts
+## Card manager and backend
+
+Open `/admin` (or tap "Host? Manage cards" in How to play), enter the admin password, then create, edit, or delete cards, set the category (Truth, Dare, Chaos), and mark them spicy or mild. The game loads cards from the API on start and keeps a local copy for offline use. Reading cards is public; changing them requires the password.
+
+Run the backend locally (Node.js 20+):
+
+```bash
+cd backend
+npm install
+cp .env.example .env        # then set ADMIN_PASSWORD (8+ characters)
+npm run db:migrate          # creates the SQLite database
+npm run db:seed             # loads the 114 starter cards (only into an empty database)
+npm run start:dev           # http://127.0.0.1:4000/graphql
+```
+
+In another terminal run `npm run dev` in the repo root. Vite proxies `/graphql` to port 4000 (override with `API_PROXY_TARGET`). Backend tests: `cd backend && npm test`.
+
+Backend notes: password goes in an `Authorization: Bearer` header and wrong guesses are rate limited; the server listens on 127.0.0.1 so it sits behind a reverse proxy; GraphQL introspection is off in production. The old "Adding or editing prompts" files in `src/features/game/data/` are now only the offline fallback and the seed source.
+
+## Adding or editing prompts (bundled fallback)
 
 Edit the arrays in `src/features/game/data/`. Keep prompts short, standalone, and passable. **Append new prompts to the end** of an array: IDs are generated from position, and appending keeps IDs stable for anyone mid-game. The data tests check for unique IDs, empty text, duplicates, minimum counts per category, and overly long prompts.
 

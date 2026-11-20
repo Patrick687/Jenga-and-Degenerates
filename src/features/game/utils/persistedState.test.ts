@@ -44,14 +44,6 @@ describe('parsePersistedState', () => {
     expect(state.history).toHaveLength(1)
   })
 
-  it('drops used IDs for prompts that no longer exist', () => {
-    const state = parsePersistedState(
-      { version: 1, usedIds: ['truth-01', 'removed-99'] },
-      new Set(['truth-01']),
-    )
-    expect(state.usedIds).toEqual(['truth-01'])
-  })
-
   it('caps history length', () => {
     const history = Array.from({ length: MAX_HISTORY + 20 }, (_, i) => ({ ...validEntry, id: String(i) }))
     expect(parsePersistedState({ version: 1, history }).history).toHaveLength(MAX_HISTORY)

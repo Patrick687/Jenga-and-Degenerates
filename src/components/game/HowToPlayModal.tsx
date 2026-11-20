@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { Modal } from '../ui/Modal'
 
 const STEPS = [
@@ -32,6 +33,11 @@ export function HowToPlayModal({ onClose }: { onClose: () => void }) {
       <p className="mt-3 text-sm text-mist">
         Nothing here ever requires drinking, touching anyone, sharing private messages or photos, spilling someone
         else&apos;s secrets, or doing anything unsafe.
+      </p>
+      <p className="mt-5 text-center text-sm">
+        <Link to="/admin" className="text-mist underline underline-offset-4 hover:text-paper">
+          Host? Manage cards
+        </Link>
       </p>
     </Modal>
   )
