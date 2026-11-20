@@ -94,3 +94,11 @@ Prompt selection lives in `features/game/utils/promptSelector.ts` as a pure func
 ## Adding or editing prompts
 
 Edit the arrays in `src/features/game/data/`. Keep prompts short, standalone, and passable. **Append new prompts to the end** of an array: IDs are generated from position, and appending keeps IDs stable for anyone mid-game. The data tests check for unique IDs, empty text, duplicates, minimum counts per category, and overly long prompts.
+
+## Automatic deploys (GitHub Actions + DigitalOcean)
+
+Every push to `main` runs `.github/workflows/deploy.yml`: install, test, build with `VITE_PUBLIC_APP_URL=https://jenga.codewithpatrick.dev`, then rsync `dist/` to `/var/www/jenga/` on the droplet over SSH.
+
+**GitHub repo secrets required** (Settings → Secrets and variables → Actions): `SSH_PRIVATE_KEY`, `DROPLET_IP`, `DROPLET_USERNAME`.
+
+**One-time server setup:** create `/var/www/jenga` owned by the deploy user, install `deploy/nginx-jenga.conf` as an nginx site, add a DNS A record for `jenga`, and run `sudo certbot --nginx -d jenga.codewithpatrick.dev`.
