@@ -142,3 +142,28 @@ model GameEvent {
 
   @@index([audienceId])
 }
+
+// ---------------------------------------------------------------------------
+// Guest card suggestions
+// ---------------------------------------------------------------------------
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// A card suggested by a guest. It joins the deck only once the host approves it.
+model CardSubmission {
+  id          String           @id @default(cuid())
+  category    Category
+  text        String
+  spicy       Boolean          @default(false)
+  /// Optional first name or nickname, so the host knows who to credit.
+  submittedBy String?
+  status      SubmissionStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  decidedAt   DateTime?
+
+  @@index([status])
+}
