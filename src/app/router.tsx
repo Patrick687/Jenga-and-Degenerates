@@ -4,6 +4,7 @@ import { GamePage } from '../pages/GamePage'
 
 // Guests only ever download the game; the card manager loads on demand.
 const AssassinPage = lazy(() => import('../pages/AssassinPage').then((module) => ({ default: module.AssassinPage })))
+const SubmitPage = lazy(() => import('../pages/SubmitPage').then((module) => ({ default: module.SubmitPage })))
 const AdminPage = lazy(() => import('../pages/AdminPage').then((module) => ({ default: module.AdminPage })))
 
 export function AppRouter() {
@@ -15,6 +16,14 @@ export function AppRouter() {
         element={
           <Suspense fallback={null}>
             <AdminPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/submit"
+        element={
+          <Suspense fallback={null}>
+            <SubmitPage />
           </Suspense>
         }
       />
