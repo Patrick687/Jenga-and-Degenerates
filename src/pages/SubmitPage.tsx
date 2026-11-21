@@ -1,176 +1,18 @@
-import { Check, Flame, Send } from 'lucide-react'
-import { useId, useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
-import { CATEGORY_THEME } from '../components/game/categoryTheme'
 import { AppShell } from '../components/layout/AppShell'
-import { Button } from '../components/ui/Button'
-import { CARD_TEXT_MAX_LENGTH, CARD_TEXT_MIN_LENGTH } from '../features/cards/constants'
-import { CATEGORIES, CATEGORY_META } from '../features/game/data/categories'
-import type { Category } from '../features/game/types/game.types'
-import { submitCard } from '../features/submissions/api/submissionsApi'
-import { GraphQLRequestError } from '../lib/graphql'
-
-const NAME_MAX_LENGTH = 24
+import { SuggestCardForm } from '../components/submit/SuggestCardForm'
 
 /** Public page guests reach by QR code to suggest a card. The host approves before it goes in the deck. */
 export function SubmitPage() {
-  const [category, setCategory] = useState<Category>('truth')
-  const [text, setText] = useState('')
-  const [spicy, setSpicy] = useState(false)
-  const [name, setName] = useState('')
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [sent, setSent] = useState(0)
-  const textId = useId()
-  const nameId = useId()
-
-  const length = text.trim().length
-  const canSend = length >= CARD_TEXT_MIN_LENGTH && length <= CARD_TEXT_MAX_LENGTH && !pending
-
-  const send = async (event: FormEvent) => {
-    event.preventDefault()
-    if (!canSend) return
-    setPending(true)
-    setError(null)
-    try {
-      await submitCard({ category, text: text.trim(), spicy, submittedBy: name })
-      setText('')
-      setSpicy(false)
-      setSent((count) => count + 1)
-    } catch (caught) {
-      setError(caught instanceof GraphQLRequestError ? caught.message : 'Something went wrong. Try again.')
-    } finally {
-      setPending(false)
-    }
-  }
-
-  if (sent > 0 && text === '' && !error) {
-    return (
-      <AppShell>
-        <main className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
-          <span className="flex size-20 items-center justify-center rounded-full bg-hot/15 text-hot">
-            <Check aria-hidden className="size-10" />
-          </span>
-          <h1 className="font-display text-4xl font-bold tracking-tight">Sent to the host</h1>
-          <p className="max-w-sm text-mist">
-            If it makes the cut, it goes in the deck. Keep them coming, the more unhinged the better.
-          </p>
-          <Button variant="primary" size="lg" className="w-full max-w-sm" onClick={() => setSent(0)}>
-            Add another
-          </Button>
-          <Link to="/" className="text-sm text-mist underline underline-offset-4 hover:text-paper">
-            Back to the game
-          </Link>
-        </main>
-      </AppShell>
-    )
-  }
-
   return (
     <AppShell>
       <main className="flex flex-1 flex-col px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-10">
-        <h1 className="font-display text-4xl font-bold tracking-tight">Suggest a card</h1>
-        <p className="mt-2 text-mist">Got a good truth, dare or chaos? Send it in. The host reviews everything.</p>
-
-        <form onSubmit={(event) => void send(event)} className="mt-6 space-y-5">
-          <fieldset>
-            <legend className="mb-2 text-sm font-semibold text-mist">Category</legend>
-            <div className="grid grid-cols-3 gap-2">
-              {CATEGORIES.map((option) => {
-                const theme = CATEGORY_THEME[option]
-                const selected = option === category
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => setCategory(option)}
-                    className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl border font-display text-sm font-bold transition active:scale-95 ${
-                      selected ? theme.selected : 'border-white/10 bg-ink/50 text-mist hover:bg-white/10'
-                    }`}
-                  >
-                    <theme.Icon aria-hidden className="size-5" />
-                    {CATEGORY_META[option].label}
-                  </button>
-                )
-              })}
-            </div>
-          </fieldset>
-
-          <div>
-            <label htmlFor={textId} className="mb-1.5 block text-sm font-semibold text-mist">
-              Your card
-            </label>
-            <textarea
-              id={textId}
-              rows={4}
-              value={text}
-              maxLength={CARD_TEXT_MAX_LENGTH}
-              onChange={(event) => setText(event.target.value)}
-              placeholder="Short and standalone. Nobody should need context."
-              className="w-full resize-none rounded-2xl border border-white/15 bg-ink px-4 py-3 text-lg leading-snug text-paper placeholder:text-mist/70"
-            />
-            <p className="mt-1 text-right text-xs text-mist">
-              {text.length}/{CARD_TEXT_MAX_LENGTH}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            role="switch"
-            aria-checked={spicy}
-            onClick={() => setSpicy((value) => !value)}
-            className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left transition active:scale-[0.99] ${
-              spicy ? 'border-hot/60 bg-hot/10' : 'border-white/10 bg-ink/50 hover:bg-white/10'
-            }`}
-          >
-            <Flame aria-hidden className={`size-6 shrink-0 ${spicy ? 'text-hot' : 'text-mist'}`} />
-            <span className="flex-1">
-              <span className="block font-display font-bold">Spicy</span>
-              <span className="block text-sm text-mist">Only shown when Turn up the heat is on.</span>
-            </span>
-            <span
-              aria-hidden
-              className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${spicy ? 'bg-hot' : 'bg-white/15'}`}
-            >
-              <span
-                className={`absolute top-1 left-1 size-6 rounded-full bg-paper shadow transition-transform ${spicy ? 'translate-x-6' : ''}`}
-              />
-            </span>
-          </button>
-
-          <div>
-            <label htmlFor={nameId} className="mb-1.5 block text-sm font-semibold text-mist">
-              Your name <span className="font-normal">(optional)</span>
-            </label>
-            <input
-              id={nameId}
-              value={name}
-              maxLength={NAME_MAX_LENGTH}
-              autoComplete="given-name"
-              onChange={(event) => setName(event.target.value)}
-              placeholder="So we know who to thank"
-              className="min-h-12 w-full rounded-2xl border border-white/15 bg-ink px-4 text-paper placeholder:text-mist/70"
-            />
-          </div>
-
-          {error && (
-            <p role="alert" className="rounded-2xl border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-300">
-              {error}
-            </p>
-          )}
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            className="w-full"
-            disabled={!canSend}
-            icon={<Send aria-hidden className="size-5" />}
-          >
-            {pending ? 'Sending…' : 'Send it in'}
-          </Button>
-        </form>
+        <h1 className="font-display text-4xl font-bold tracking-tight">Add a card</h1>
+        <p className="mt-2 mb-6 text-mist">Got a good truth, dare or chaos? Add it and it goes straight into the deck.</p>
+        <SuggestCardForm />
+        <Link to="/" className="mt-8 text-center text-sm text-mist underline underline-offset-4 hover:text-paper">
+          Back to the game
+        </Link>
       </main>
     </AppShell>
   )

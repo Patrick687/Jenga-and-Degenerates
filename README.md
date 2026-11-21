@@ -110,11 +110,9 @@ In another terminal run `npm run dev` in the repo root. Vite proxies `/graphql` 
 
 Backend notes: password goes in an `Authorization: Bearer` header and wrong guesses are rate limited; the server listens on 127.0.0.1 so it sits behind a reverse proxy; GraphQL introspection is off in production. The old "Adding or editing prompts" files in `src/features/game/data/` are now only the offline fallback and the seed source.
 
-## Card suggestions (`/submit`)
+## Guest cards (`/submit`)
 
-Guests can suggest cards by scanning a second QR code, which opens `/submit` (category, text, spicy, optional name). Nothing goes straight into the deck: suggestions land in a queue in `/admin` under the **Suggestions** tab, where the host can approve, edit then approve, reject, or approve all. The tab shows the QR code to print or download and a badge with how many are waiting.
-
-Guards: duplicates (against the deck and the queue) are refused, one address can send at most 60 per 10 minutes, and the queue holds at most 300. **Heads up:** while `RESEED_CARDS` is `'true'` in the deploy workflow, every deploy wipes the cards table, including approved suggestions. Set it to `'false'` before relying on suggestions.
+Guests can add cards themselves: the **Add a card** button in the game, or the QR code in `/admin` under **Card QR**, opens a form (category, text, spicy). Cards go **straight into the deck** with no approval. Duplicates are refused, one address can add at most 60 per 10 minutes, and the deck stops at 600 cards. Delete anything unwanted in the Jenga cards tab. **Heads up:** while `RESEED_CARDS` is `'true'` in the deploy workflow, every deploy wipes the cards table, including guest cards. Set it to `'false'` before relying on them.
 
 ## Assassin game (`/assassin`)
 
