@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { CategorySelector } from '../components/game/CategorySelector'
 import { GameControls } from '../components/game/GameControls'
@@ -6,14 +7,16 @@ import { HowToPlayModal } from '../components/game/HowToPlayModal'
 import { PromptCard } from '../components/game/PromptCard'
 import { PromptHistory } from '../components/game/PromptHistory'
 import { QRCodeModal } from '../components/game/QRCodeModal'
+import { SuggestCardModal } from '../components/game/SuggestCardModal'
 import { SpicyModeToggle } from '../components/game/SpicyModeToggle'
 import { TitleBlock } from '../components/game/TitleBlock'
 import { AppShell } from '../components/layout/AppShell'
 import { Header } from '../components/layout/Header'
+import { Button } from '../components/ui/Button'
 import { usePromptGenerator } from '../features/game/hooks/usePromptGenerator'
 import { usePrompts } from '../features/game/hooks/usePrompts'
 
-type Panel = 'history' | 'qr' | 'help' | null
+type Panel = 'history' | 'qr' | 'help' | 'suggest' | null
 
 export function GamePage() {
   const prompts = usePrompts()
@@ -48,12 +51,17 @@ export function GamePage() {
         )}
 
         <SpicyModeToggle enabled={game.spicy} onChange={game.setSpicy} />
+
+        <Button onClick={() => setPanel('suggest')} icon={<Plus aria-hidden className="size-5" />}>
+          Add a card
+        </Button>
       </main>
 
       <GameControls hasPrompt={game.current !== null} onNext={withHaptics(game.next)} onPass={withHaptics(game.pass)} />
 
       {panel === 'history' && <PromptHistory history={game.history} onReset={game.reset} onClose={closePanel} />}
       {panel === 'qr' && <QRCodeModal onClose={closePanel} />}
+      {panel === 'suggest' && <SuggestCardModal onClose={closePanel} />}
       {panel === 'help' && <HowToPlayModal onClose={closePanel} />}
     </AppShell>
   )
