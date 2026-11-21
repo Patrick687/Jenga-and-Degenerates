@@ -2,18 +2,17 @@ import { ArrowLeft, LogOut } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router'
 import { AdminLogin } from '../components/admin/AdminLogin'
 import { CardManager } from '../components/admin/CardManager'
-import { SubmissionsManager } from '../components/admin/SubmissionsManager'
+import { CardQrCode } from '../components/admin/CardQrCode'
 import { HostConsole } from '../components/assassin/HostConsole'
 import { AppShell } from '../components/layout/AppShell'
 import { IconButton } from '../components/ui/IconButton'
 import { useAdminSession } from '../features/cards/hooks/useAdminSession'
-import { useSubmissions } from '../features/submissions/hooks/useSubmissions'
 
-type Section = 'cards' | 'suggestions' | 'assassin'
+type Section = 'cards' | 'qr' | 'assassin'
 
 const SECTIONS: ReadonlyArray<{ id: Section; label: string }> = [
   { id: 'cards', label: 'Jenga cards' },
-  { id: 'suggestions', label: 'Suggestions' },
+  { id: 'qr', label: 'Card QR' },
   { id: 'assassin', label: 'Assassin' },
 ]
 
@@ -26,9 +25,7 @@ interface AdminHomeProps {
 function AdminHome({ password, onLogout }: AdminHomeProps) {
   const [params, setParams] = useSearchParams()
   const tab = params.get('tab')
-  const section: Section = tab === 'assassin' || tab === 'suggestions' ? tab : 'cards'
-  const { submissions, error: submissionsError, refresh: refreshSubmissions } = useSubmissions(password, onLogout)
-  const waiting = submissions?.length ?? 0
+  const section: Section = tab === 'assassin' || tab === 'qr' ? tab : 'cards'
 
   return (
     <>
@@ -57,28 +54,14 @@ function AdminHome({ password, onLogout }: AdminHomeProps) {
             }`}
           >
             {label}
-            {id === 'suggestions' && waiting > 0 && (
-              <span
-                aria-label={`${waiting} waiting`}
-                className="absolute -top-1.5 -right-1 inline-flex min-w-5 items-center justify-center rounded-full bg-tangerine px-1.5 text-xs font-bold text-ink"
-              >
-                {waiting}
-              </span>
-            )}
           </button>
         ))}
       </div>
 
       {section === 'cards' ? (
         <CardManager password={password} onLogout={onLogout} />
-      ) : section === 'suggestions' ? (
-        <SubmissionsManager
-          password={password}
-          onLogout={onLogout}
-          submissions={submissions}
-          error={submissionsError}
-          refresh={refreshSubmissions}
-        />
+      ) : section === 'qr' ? (
+        <CardQrCode />
       ) : (
         <HostConsole password={password} onLogout={onLogout} />
       )}
@@ -99,7 +82,7 @@ export function AdminPage() {
         <AdminLogin
           onLogin={login}
           heading={['Host', 'tools']}
-          description="Hosts only. Enter the admin password to manage the Jenga cards, review suggestions and run the Assassin game."
+          description="Hosts only. Enter the admin password to manage the Jenga cards, share the add-a-card code and run the Assassin game."
         />
       )}
     </AppShell>

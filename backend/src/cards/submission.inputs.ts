@@ -1,15 +1,13 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { IsBoolean, IsEnum, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { Category } from '../generated/prisma/enums';
 import { CARD_TEXT_MAX_LENGTH, CARD_TEXT_MIN_LENGTH } from './card.inputs';
-
-export const SUBMITTER_MAX_LENGTH = 24;
 
 const tidy = ({ value }: { value: unknown }): unknown =>
   typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : value;
 
-/** A public suggestion from a guest. */
+/** A card added by a guest. It goes straight into the deck. */
 @InputType()
 export class SubmitCardInput {
   @Field(() => Category)
@@ -29,11 +27,4 @@ export class SubmitCardInput {
   @Field({ defaultValue: false })
   @IsBoolean()
   spicy!: boolean;
-
-  @Field(() => String, { nullable: true })
-  @IsOptional()
-  @Transform(tidy)
-  @IsString()
-  @MaxLength(SUBMITTER_MAX_LENGTH, { message: 'Keep your name to 24 characters.' })
-  submittedBy?: string | null;
 }

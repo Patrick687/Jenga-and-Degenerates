@@ -36,7 +36,7 @@ export function HowToPlayModal({ onClose }: { onClose: () => void }) {
       </p>
       <p className="mt-5 text-center text-sm">
         <Link to="/submit" className="text-mist underline underline-offset-4 hover:text-paper">
-          Got a card idea? Suggest it
+          Got a card idea? Add it
         </Link>
       </p>
       <p className="mt-3 text-center text-sm">

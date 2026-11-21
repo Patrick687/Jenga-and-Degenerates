@@ -8,19 +8,15 @@ import type { Category } from '../../features/game/types/game.types'
 import { submitCard } from '../../features/submissions/api/submissionsApi'
 import { GraphQLRequestError } from '../../lib/graphql'
 
-const NAME_MAX_LENGTH = 24
-
 /** The suggestion form with its own thank-you state. Used by the /submit page and the in-game popup. */
 export function SuggestCardForm() {
   const [category, setCategory] = useState<Category>('truth')
   const [text, setText] = useState('')
   const [spicy, setSpicy] = useState(false)
-  const [name, setName] = useState('')
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sent, setSent] = useState(0)
   const textId = useId()
-  const nameId = useId()
 
   const length = text.trim().length
   const canSend = length >= CARD_TEXT_MIN_LENGTH && length <= CARD_TEXT_MAX_LENGTH && !pending
@@ -31,7 +27,7 @@ export function SuggestCardForm() {
     setPending(true)
     setError(null)
     try {
-      await submitCard({ category, text: text.trim(), spicy, submittedBy: name })
+      await submitCard({ category, text: text.trim(), spicy })
       setText('')
       setSpicy(false)
       setSent((count) => count + 1)
@@ -48,8 +44,8 @@ export function SuggestCardForm() {
         <span className="flex size-16 items-center justify-center rounded-full bg-hot/15 text-hot">
           <Check aria-hidden className="size-8" />
         </span>
-        <p className="font-display text-2xl font-bold">Sent to the host</p>
-        <p className="max-w-sm text-mist">If it makes the cut, it goes in the deck. Keep them coming.</p>
+        <p className="font-display text-2xl font-bold">Added to the deck</p>
+        <p className="max-w-sm text-mist">It's live. Pull a block and you might get it. Keep them coming.</p>
         <Button variant="primary" size="lg" className="w-full max-w-sm" onClick={() => setSent(0)}>
           Add another
         </Button>
@@ -125,21 +121,6 @@ export function SuggestCardForm() {
         </span>
       </button>
 
-      <div>
-        <label htmlFor={nameId} className="mb-1.5 block text-sm font-semibold text-mist">
-          Your name <span className="font-normal">(optional)</span>
-        </label>
-        <input
-          id={nameId}
-          value={name}
-          maxLength={NAME_MAX_LENGTH}
-          autoComplete="given-name"
-          onChange={(event) => setName(event.target.value)}
-          placeholder="So we know who to thank"
-          className="min-h-12 w-full rounded-2xl border border-white/15 bg-ink px-4 text-paper placeholder:text-mist/70"
-        />
-      </div>
-
       {error && (
         <p role="alert" className="rounded-2xl border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-300">
           {error}
@@ -154,7 +135,7 @@ export function SuggestCardForm() {
         disabled={!canSend}
         icon={<Send aria-hidden className="size-5" />}
       >
-        {pending ? 'Sending…' : 'Send it in'}
+        {pending ? 'Adding…' : 'Add to the deck'}
       </Button>
     </form>
   )

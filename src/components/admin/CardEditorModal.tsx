@@ -16,12 +16,9 @@ interface CardEditorModalProps {
   /** Resolves to an error message to show, or null once saved. */
   onSave: (draft: CardDraft) => Promise<string | null>
   onClose: () => void
-  /** Overrides for reuse, e.g. reviewing a guest suggestion. */
-  title?: string
-  saveLabel?: string
 }
 
-export function CardEditorModal({ card, defaultCategory, onSave, onClose, title, saveLabel }: CardEditorModalProps) {
+export function CardEditorModal({ card, defaultCategory, onSave, onClose }: CardEditorModalProps) {
   const [category, setCategory] = useState<Category>(card?.category ?? defaultCategory)
   const [text, setText] = useState(card?.text ?? '')
   const [spicy, setSpicy] = useState(card?.spicy ?? false)
@@ -45,7 +42,7 @@ export function CardEditorModal({ card, defaultCategory, onSave, onClose, title,
   }
 
   return (
-    <Modal title={title ?? (card ? 'Edit card' : 'New card')} onClose={onClose}>
+    <Modal title={card ? 'Edit card' : 'New card'} onClose={onClose}>
       <form onSubmit={(event) => void submit(event)} className="space-y-5">
         <fieldset>
           <legend className="mb-2 text-sm font-semibold text-mist">Category</legend>
@@ -124,7 +121,7 @@ export function CardEditorModal({ card, defaultCategory, onSave, onClose, title,
             Cancel
           </Button>
           <Button type="submit" variant="primary" className="flex-1" disabled={!canSave}>
-            {pending ? 'Saving…' : (saveLabel ?? (card ? 'Save changes' : 'Add card'))}
+            {pending ? 'Saving…' : card ? 'Save changes' : 'Add card'}
           </Button>
         </div>
       </form>

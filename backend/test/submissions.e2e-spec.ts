@@ -2,18 +2,12 @@ import { SubmissionRateLimiter } from '../src/cards/submission-rate-limiter';
 import { ADMIN_PASSWORD, createTestApp, TestApp } from './test-app';
 
 const SUBMIT = `mutation ($input: SubmitCardInput!) { submitCard(input: $input) }`;
-const PENDING = `query { adminCardSubmissions { id category text spicy submittedBy status } }`;
-const APPROVE = `mutation ($id: ID!, $edits: UpdateCardInput) {
-  approveSubmission(id: $id, edits: $edits) { id category text spicy }
-}`;
-const REJECT = `mutation ($id: ID!) { rejectSubmission(id: $id) }`;
-const APPROVE_ALL = `mutation { approveAllSubmissions }`;
-const CARDS = `query { cards { text } }`;
+const CARDS = `query { cards { category text spicy } }`;
 
-describe('Card submissions', () => {
+describe('Guest card submissions', () => {
   let t: TestApp;
   let n = 0;
-  const unique = () => `Suggested card number ${(n += 1)} for the deck`;
+  const unique = () => `Guest card number ${(n += 1)} for the deck`;
 
   beforeAll(async () => {
     t = await createTestApp();
@@ -24,102 +18,33 @@ describe('Card submissions', () => {
 
   const submit = (over: Record<string, unknown> = {}) =>
     t.gql(SUBMIT, { input: { category: 'TRUTH', text: unique(), spicy: false, ...over } });
-  const pending = async () => (await t.gql(PENDING, undefined, ADMIN_PASSWORD)).data?.adminCardSubmissions ?? [];
+  const deck = async () => (await t.gql(CARDS)).data?.cards as Array<{ category: string; text: string; spicy: boolean }>;
 
-  it('accepts a suggestion without any password', async () => {
-    const res = await submit({ submittedBy: '  Sam  ' });
+  it('adds a card to the deck with no password', async () => {
+    const res = await submit({ category: 'DARE', text: '  Do   your best   walk ', spicy: true });
     expect(res.errors).toBeUndefined();
     expect(res.data?.submitCard).toBe(true);
-    const list = await pending();
-    expect(list.at(-1)).toMatchObject({ submittedBy: 'Sam', status: 'PENDING', spicy: false });
-  });
-
-  it('keeps the submitter optional', async () => {
-    const res = await submit({ submittedBy: '   ' });
-    expect(res.errors).toBeUndefined();
-    expect((await pending()).at(-1).submittedBy).toBeNull();
+    expect(await deck()).toContainEqual({ category: 'DARE', text: 'Do your best walk', spicy: true });
   });
 
   it('rejects text that is too short or too long', async () => {
-    const short = await submit({ text: 'hi' });
-    expect(short.errors?.[0].extensions?.code).toBe('BAD_REQUEST');
-    const long = await submit({ text: 'x'.repeat(161) });
-    expect(long.errors?.[0].extensions?.code).toBe('BAD_REQUEST');
+    expect((await submit({ text: 'hi' })).errors?.[0].extensions?.code).toBe('BAD_REQUEST');
+    expect((await submit({ text: 'x'.repeat(161) })).errors?.[0].extensions?.code).toBe('BAD_REQUEST');
   });
 
-  it('rejects an overlong name', async () => {
-    const res = await submit({ submittedBy: 'n'.repeat(25) });
-    expect(res.errors?.[0].extensions?.code).toBe('BAD_REQUEST');
-  });
-
-  it('blocks duplicates of pending suggestions, ignoring case and spacing', async () => {
+  it('blocks duplicates of cards in the deck, ignoring case and spacing', async () => {
     await submit({ text: 'Duplicate me please' });
     const again = await submit({ text: '  DUPLICATE   me please ' });
-    expect(again.errors?.[0].message).toMatch(/already suggested/i);
+    expect(again.errors?.[0].message).toMatch(/already in the deck/i);
   });
 
-  it('blocks suggestions that are already in the deck', async () => {
-    const text = 'A card that is already in the deck';
+  it('also blocks copies of cards the host added', async () => {
     await t.gql(
       `mutation ($input: CreateCardInput!) { createCard(input: $input) { id } }`,
-      { input: { category: 'TRUTH', text, spicy: false } },
+      { input: { category: 'TRUTH', text: 'Host made card', spicy: false } },
       ADMIN_PASSWORD,
     );
-    const res = await submit({ text });
-    expect(res.errors?.[0].message).toMatch(/already in the deck/i);
-  });
-
-  it('keeps the review queue admin-only', async () => {
-    const none = await t.gql(PENDING);
-    expect(none.errors?.[0].extensions?.code).toBe('UNAUTHENTICATED');
-    const bad = await t.gql(APPROVE_ALL, undefined, 'wrong');
-    expect(bad.errors?.[0].extensions?.code).toBe('UNAUTHENTICATED');
-  });
-
-  it('approves a suggestion into the deck, with edits', async () => {
-    await submit({ text: 'Original wording of a card', category: 'DARE', spicy: true });
-    const target = (await pending()).find((s: { text: string }) => s.text === 'Original wording of a card');
-    const res = await t.gql(
-      APPROVE,
-      { id: target.id, edits: { text: 'Edited wording of a card', spicy: false } },
-      ADMIN_PASSWORD,
-    );
-    expect(res.errors).toBeUndefined();
-    expect(res.data?.approveSubmission).toMatchObject({
-      category: 'DARE',
-      text: 'Edited wording of a card',
-      spicy: false,
-    });
-    expect((await t.gql(CARDS)).data?.cards.map((c: { text: string }) => c.text)).toContain(
-      'Edited wording of a card',
-    );
-    expect((await pending()).some((s: { id: string }) => s.id === target.id)).toBe(false);
-    const again = await t.gql(APPROVE, { id: target.id }, ADMIN_PASSWORD);
-    expect(again.errors?.[0].message).toMatch(/already handled/i);
-  });
-
-  it('rejects a suggestion without adding a card', async () => {
-    await submit({ text: 'Reject this one right here' });
-    const target = (await pending()).find((s: { text: string }) => s.text === 'Reject this one right here');
-    const res = await t.gql(REJECT, { id: target.id }, ADMIN_PASSWORD);
-    expect(res.data?.rejectSubmission).toBe(true);
-    expect((await t.gql(CARDS)).data?.cards.map((c: { text: string }) => c.text)).not.toContain(
-      'Reject this one right here',
-    );
-    expect((await t.gql(REJECT, { id: target.id }, ADMIN_PASSWORD)).errors?.[0].message).toMatch(/already handled/i);
-  });
-
-  it('reports unknown ids', async () => {
-    const res = await t.gql(REJECT, { id: 'nope' }, ADMIN_PASSWORD);
-    expect(res.errors?.[0].message).toMatch(/not found/i);
-  });
-
-  it('approves everything waiting and returns the count', async () => {
-    const before = await pending();
-    const res = await t.gql(APPROVE_ALL, undefined, ADMIN_PASSWORD);
-    expect(res.data?.approveAllSubmissions).toBe(before.length);
-    expect(await pending()).toHaveLength(0);
-    expect((await t.gql(APPROVE_ALL, undefined, ADMIN_PASSWORD)).data?.approveAllSubmissions).toBe(0);
+    expect((await submit({ text: 'host made card' })).errors?.[0].message).toMatch(/already in the deck/i);
   });
 
   it('rate limits a flood from one address', async () => {
